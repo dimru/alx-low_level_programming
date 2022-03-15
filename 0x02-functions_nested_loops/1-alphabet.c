@@ -1,21 +1,17 @@
 #include "main.h"
-
 /**
- * print_alphabet - prints the alphabet in lowercase, followed by a new line.
+ * main - prints the string "_putchar" from a character array.
+ * Return: 0 on success.
  */
-void print_alphabet(void)
-{
-	char l;
-
-	for (l = 'a'; l <= 'z'; l++)
-	{
-		_putchar(l);
-	}
-	_putchar('\n');
-}
 int main(void)
 {
-	print_alphabet();
-	
-	return 0;
+	char c[] = "_putchar";
+	int i;
+
+	for (i = 0; i < 8; i++)
+	{
+		_putchar(c[i]);
+	}
+	_putchar('\n');
+	return (0);
 }
