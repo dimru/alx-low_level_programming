@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 /**
+* increment i to solve infinite loop 
 * main - causes an infinite loop
 * Return: 0
 */
@@ -13,7 +14,7 @@ int main(void)
 
         i = 0;
 
-        while (i < 10) //unless i is incremented the loop will never terminates.
+        while (i < 10)
         {
                 putchar(i);
         }
