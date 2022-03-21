@@ -1,23 +1,32 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
+/**
+ * main - random password generator for 101-crackme
+ *
+ * Return: always 0
+ */
 int main(void)
 {
-	int n;
-	int a[5];
-	int *p;
+char a[100];
+	int r, n, i;
 
-	a[2] = 1024;
-	p = &n;
-	/*
-	 * write your line of code here...
-	 * Remember:
-	 * - you are not allowed to use a
-	 * - you are not allowed to modify p
-	 * - only one statement
-	 * - you are not allowed to code anything else than this line of code
-	 */
-	p[5] = 98;
-	/* ...so that this prints 98\n */
-	printf("a[2] = %d\n", a[2]);
+	n = 0;
+	i = 0;
+	srand(time(NULL));
+	while (n < 2645)
+	{
+		r = rand() % 122;
+		if (r > 32)
+		{
+			a[i++] = r;
+			n += r;
+		}
+	}
+	a[i++] = (2772 - n);
+	a[i] = '\0';
+	printf("%s", a);
+
 	return (0);
 }
