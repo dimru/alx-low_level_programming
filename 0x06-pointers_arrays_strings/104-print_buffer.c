@@ -1,52 +1,49 @@
 #include "main.h"
+#include <stdio.h>
+
 /**
-*print_buffer -  C function that prints the content of an
-*  inputted number of bytes from a buffer.
-* Prints 10 bytes per line.
-* Starts with the position of the first byte in hexadecimal (8 chars),
-* starting with `0`.
-* Each line shows the hexadecimal content (2 chars) of the buffer,
-* 2 bytes at a time, separated by a space.
-* Each line shows the content of the buffer.
-* Prints the byte if it is printable; if not, prints `.`.
-* Each line ends with a new line `\n`.
-* If the inputted byte size is 0 or less, the function only prints a new line.
-*@b: number of bytes
-*@size: size of the byte
-*/
+ *print_buffer - Print a buffer 10 bytes per line.
+ *@b: Buffer address.
+ *@size: Number of characters to be printed.
+ */
 void print_buffer(char *b, int size)
 {
-	int i = 0, j;
+	int i, pi, c;
 
-	if (size < 0)
+	if (size <= 0)
+		printf("\n");
+	else
 	{
-		printf('\n');
-		return;
-	}
-
-	while (i < size)
-	{
-		if (i % 10 == 0)
-			printf("%08x: ", i);
-		for (j = i; j < i + 9; j += 2)
-		{
-			if ((j < size) && ((j + 1) < size))
-				printf("%02x%02x: ", b[j], b[j + 1]);
-			else
+		for (i = 9, pi = 0; i < size; i += 10)
+		{	printf("%.8x: ", pi);
+				for (c = pi; c <= i ; c++)
+				{	printf("%.2x", b[c]);
+					if (c % 2 == 1)
+						printf(" ");	}
+				for (c = pi; c <= i ; c++)
+				{
+					if (b[c] < 32)
+						printf(".");
+					else
+						printf("%c", b[c]);	}
+					printf("\n");
+					pi = i + 1;	}
+		if (pi < size - 1)
+		{	i -= 9;
+			printf("%.8x: ", i);
+			for (c = i; c < i + 10; c++)
 			{
-				while (++j <= i + 10)
-					printf(" ");
-				printf(" ");
+				if (c < size)
+					printf("%.2x", b[c]);
+				else
+					printf("  ");
+				if (c % 2 == 1)
+					printf(" ");	}
+			for (; i < size ; i++)
+			{
+				if (b[i] < 32)
+					printf(".");
+				else
+					printf("%c", b[i]);
 			}
-		}
-		for (j = i; j < i + 9 && j < size; j++)
-		{
-			if (b[j] >= 32 && b[j] <= 126)
-				printf("%c", b[j]);
-			else
-				printf(".");
-		}
-		printf('\n');
-		i += 10;
-	}
-}
+			printf("\n");	}	}	}
