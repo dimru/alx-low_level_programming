@@ -1,26 +1,18 @@
 #include "main.h"
+
 /**
- * reverse_array - Compare two strings
- * @a: Integer array
- * @n: Number of elements in the array
- *
- * Return: Nothing (void)
- */
+*  reverse_array - function that reverse content of array
+*  @a: array
+*  @n: number of elements
+*/
+
 void reverse_array(int *a, int n)
 {
-	int i;
-	int tmp[1000];
-	int j;
-	int k = n - 1;
-
-	for (i = 0; i < n; i++)
-	{
-		tmp[i] = a[i];
-	}
-	while (j < n)
-	{
-		*(a + j) = *(tmp + k);
-		j++;
-		k--;
-	}
+int tmp, index;
+for (index = n - 1; index > n / 2; index--)
+{
+tmp = a[n - 1 - index];
+a[n - 1 - index] = a[index];
+a[index] = tmp;
+}
 }
