@@ -1,213 +1,158 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
-/**
- * add - addition of parcial products
- * @p: parcial product
- * @mg: big malloc
- * @i: size of big malloc - 1
- * @tp: size of parcial product - 1
-  */
-void add(char *p, char *mg, int i, int tp)
-{
-	int pos = tp, a = 0, b = 0, car = 0, res = 0;
-	int cont = tp, aux = 0;
 
-	for (; cont >=  0; cont--, i--, pos--)
+/**
+ * main - program that multiplies two positive numbers
+ *
+ * @argc: argument count, must be 3
+ * @argv: arguments, argv[1] and argv[2]
+ *
+ * Return: product of argv[1] by argv[2]
+ */
+
+int main(int argc, char *argv[])
+{
+	char *num1, *num2;
+	int i, j, k, len1, len2, len, d1, d2, d1d2, carry, *mul;
+
+	if (argc != 3 || !(_isnumber(argv[1])) || !(_isnumber(argv[2])))
+		_error(), exit(98);
+	num1 = argv[1], num2 = argv[2];
+	len1 = _strlen(num1), len2 = _strlen(num2), len = len1 + len2;
+	mul = _calloc(len, sizeof(int));
+	if (mul == NULL)
+		exit(98);
+	for (i = len1 - 1; i >= 0; i--)
 	{
-		a = *(p + pos) - '0';
-		b = *(mg + i) - '0';
-		res = (a + b) + car;
-		car = res / 10;
-		res = (res % 10) + '0';
-		*(mg + i) = res;
+		d1 = num1[i] - '0';
+		carry = 0;
+		for (j = len2 - 1; j >= 0; j--)
+		{
+			d2 = num2[j] - '0';
+			d1d2 = d1 * d2;
+			mul[i + j + 1] += d1d2 % 10;
+			carry = d1d2 / 10;
+			if (mul[i + j + 1] > 9)
+			{
+				mul[i + j] += mul[i + j + 1] / 10;
+				mul[i + j + 1] = mul[i + j + 1] % 10;
+			}
+			mul[i + j] += carry;
+		}
 	}
-	res = 0;
-	for (aux = i - 1; aux >= 0; aux--)
+	for (k = 0; mul[k] == 0 && k < len; k++)
+		;
+	if (k == len)
+		_putchar(mul[len - 1] + '0');
+	else
 	{
-		a = *(mg + aux) - '0';
-		a += a + car;
-		car = a / 10;
-		a = (a % 10) + '0';
-		*(mg + aux) = a;
+		for (i = k; i < len; i++)
+			_putchar(mul[i] + '0');
 	}
+	_putchar('\n');
+	free(mul);
+	return (0);
 }
+
 /**
- * setiar - fill the pointer with 0
- * @s: pointer
- * @a: size of pointer
+ * _isnumber - checks for digit-only (0 through 9) numbers
+ *
+ * @str: parameter hard-coded in main
+ *
+ * Return: 1 or 0
  */
-void setiar(char *s, int a)
+
+int _isnumber(char *str)
 {
 	int i;
 
-	for (i = 0; i < a; i++)
-		s[i] = '0';
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+	}
+	return (1);
 }
+
 /**
- * parcial - give the parcial malloc
- * @a: size one
- * Return: parcial malloc
+ * _error - print error
+ * Return: void
  */
-char *parcial(int a)
+
+void _error(void)
 {
 	int i;
-	char *p;
+	char error[] = "Error";
 
-	p = malloc(a);
-	if (!p)
-		return (NULL);
-	for (i = 0; i < a; i++)
-		p[i] = '0';
-	return (p);
+	for (i = 0; i < 5; i++)
+		_putchar(error[i]);
+	_putchar('\n');
 }
-/**
- * grande - give big malloc
- * @a: size one
- * @b: size two
- * Return: malloc
- */
-char *grande(int a, int b)
-{
-	int i;
-	char *p;
 
-	p = malloc(a + b);
-	if (!p)
-		return (NULL);
-	for (i = 0; i < a + b; i++)
-		p[i] = '0';
-	return (p);
-}
 /**
- * tama - give the size
- * @s: string of numbers
- * Return: size
+ * _strlen - function that returns the length of a string
+ *
+ * @s: parameter defined in main
+ *
+ * Return: length of string
  */
-int tama(char *s)
+
+int _strlen(char *s)
 {
 	int i = 0;
 
-	while (s[i] != '\0')
+	while (*s != '\0')
 	{
 		i++;
+		s++;
 	}
 	return (i);
 }
-/**
- * Perror - print Error with putchar.
- * Return: Always 0.
- */
-void Perror(void)
-{
-	_putchar('E');
-	_putchar('r');
-	_putchar('r');
-	_putchar('o');
-	_putchar('r');
-	_putchar('\n');
-	exit(98);
-}
-/**
- * numero - check if strings have only numbers.
- * @s: string 1
- * @a: string 2
- * Return: Always 1 if not or 0 if only has number.
- */
-void numero(char *s, char *a)
-{
-	int i = 0, aux = 0;
 
-	while (s[i] != '\0')
-	{
-		if (!(s[i] >= '0' && s[i] <= '9'))
-		{
-			aux = 1;
-			break;
-		}
-		i++;
-	}
-	i = 0;
-	while (a[i] != '\0')
-	{
-		if (!(a[i] >= '0' && a[i] <= '9'))
-		{
-			aux = 1;
-			break;
-		}
-		i++;
-	}
-	if (aux == 1)
-		Perror();
-	if (*s == '0' || *a == '0')
-	{
-		_putchar('0');
-		_putchar('\n');
-		exit(0);
-	}
-}
 /**
- * impresion - print the pointer
- * @s: string.
- * @a: size of string
+ * _calloc - function that allocates memory for an array, using malloc
+ * @nmemb: size of the memory space to allocate in bytes
+ * @size: size of type
+ * Return: void pointer
  */
-void impresion(char *s, int a)
-{
-	int i;
 
-	for (i = 0; i < a; i++)
+void *_calloc(unsigned int nmemb, unsigned int size)
+{
+	void *ptr;
+
+	if (nmemb == 0 || size == 0)
+		return (NULL);
+
+	ptr = malloc(nmemb * size);
+	if (ptr == NULL)
 	{
-		if (!(s[0] == '0' && i == 0))
-			_putchar(s[i]);
+		return (NULL);
 	}
-	_putchar('\n');
+	_memset(ptr, 0, size * nmemb);
+	return (ptr);
 }
-/**
- * main - check the code for Holberton School students.
- * @argv: array of pointers store the arguments
- * @argc: quantity of arguments
- * Return: Always 0.
- */
-int main(int argc, char *argv[])
-{
-	int t1, t2, t3, a = 0, b = 0, j = 0, aux = 0, car, g, ind;
-	char *mg, *p, *size1, *size2;
 
-	if (argc != 3)
-		Perror();
-	else
-	{ numero(argv[1], argv[2]);
-		t1 = tama(argv[1]);
-		t2 = tama(argv[2]);
-		ind = t1 + t2;
-		mg = grande(t1, t2);
-		if (t1 >= t2)
-		{ size1 = argv[1];
-			size2 = argv[2];
-			b = t1 - 1;
-			a = t2 - 1;
-			t3 = t1 + 1; }
-		else
-		{ size1 = argv[2];
-			size2 = argv[1];
-			b = t2 - 1;
-			a = t1 - 1;
-			t3 = t2 + 1; }
-		g = b;
-		p = parcial(t3);
-		j = b + 1;
-		for (; a >= 0; a--, ind--)
-		{ car = 0;
-			b = g;
-			j = g + 1;
-			setiar(p, t3);
-			for (; b >= 0; b--, j--)
-			{ aux = ((size2[a] - '0') * (size1[b] - '0'));
-				aux = aux + car;
-				p[j] = ((aux % 10) + '0');
-				car = aux / 10;	}
-			p[j] = (car + '0');
-			add(p, mg, (ind - 1), (t3 - 1)); }
-		impresion(mg, (t1 + t2)); }
-	return (0);
+/**
+ * _memset - function that fills memory with a constant byte
+ *
+ * @s: parameter defined in main, pointer to memory area
+ * @b: parameter defined in main, constant byte
+ * @n: parameter defined in main, number of bytes to be filled
+ *
+ * Return: memory address of function (memory area)
+ */
+
+char *_memset(char *s, char b, unsigned int n)
+{
+	unsigned int i;
+	char *tmp = s;
+
+	for (i = 0; i < n; i++)
+	{
+		*s = b;
+		s++;
+	}
+	s = tmp;
+	return (s);
 }
